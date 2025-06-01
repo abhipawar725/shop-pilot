@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="flex items-center justify-center p-6 bg-slate-200 min-h-screen">
+        <form onsubmit="handleSubmit(event)" class="p-6 rounded-lg shadow-md bg-white w-lg">
+            <h2 class="mb-6 text-xl font-medium">Signup</h2>
+            <div class="flex flex-col gap-5">
+                <div class="flex flex-col gap-2">
+                   <label for="fullname">Full Name</label>
+                   <input type="text" name="fullname" id="fullname" class="h-12 rounded px-4 bg-white w-full border border-slate-300 outline-0">
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="h-12 rounded px-4 bg-white w-full border border-slate-300 outline-0">
+                 </div>
+                 <div class="flex flex-col gap-2">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="h-12 rounded px-4 bg-white w-full border border-slate-300 outline-0">
+                 </div>
+                 <div class="flex flex-col gap-2">
+                    <button type="submit" class="h-12 rounded px-4 text-white w-full bg-slate-800 outline-0">Submit</button>
+                 </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        const handleSubmit = async (e) => {
+            e.preventDefault()
+            const form = e.target
+            const formData = new FormData(form)
+            const data = {
+                fullname: formData.get('fullname'),
+                email: formData.get('email'),
+                password: formData.get('password'),
+            }
+            try {
+               await axios.post("http://localhost:4000/api/signup", data)
+               .then((res) => {
+                alert(res.data.message)
+                if(res.data.redirect){
+                    window.location.href = res.data.redirect
+                }
+               })
+               .catch((error) => {
+                alert(error.response.data.message)
+               })
+            } catch (error) {
+                console.log(error.message)
+            }
+
+        }
+    </script>
+</body>
+</html>

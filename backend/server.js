@@ -1,10 +1,18 @@
 import dotenv from "dotenv"
 import mongoose from "mongoose"
 import express from "express"
+import router from "./routes/authRoutes.js"
+import path, { join } from "path"
+import { fileURLToPath } from "url"
+import cookieParser from "cookie-parser" 
 
 dotenv.config()
-const port = process.env.PORT || 3000
+
+const port = process.env.PORT || 4000
 const db = process.env.DB_URL
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 mongoose.connect(db)
 .then(() => console.log("Database is connected"))
@@ -12,12 +20,14 @@ mongoose.connect(db)
 
 const app = express()
 
-app.get("/api/signup" , (req, res) => {
-    res.send("signup page")
-})
+app.use(express.json())
+app.use(express.urlencoded({extended: false}))
+app.use(cookieParser())
 
-app.get("/api/login", (req, res) => {
-    res.send("login page") 
-})
+app.set("view engine", "ejs")
+app.set("views", path.join(__dirname, "views"))
+app.use(express.static("public"))
+
+app.use("/", router)
 
 app.listen(port, () => console.log("App is connected"))
