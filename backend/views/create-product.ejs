@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css" />
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="flex min-h-screen bg-slate-100">
+        <div class="basis-3/12 bg-slate-300 min-h-screen p-6">
+            <div class="flex flex-col mb-5 gap-3">
+                <h2 class="font-medium capitalize">Welcome <%= fullname %>
+                </h2>
+                <p>
+                    <%= email %>
+                </p>
+            </div>
+            <div class="flex flex-col gap-3">
+                <a href="/dashboard" class="w-full px-4 py-3 bg-slate-600 text-white rounded">Products</a>
+                <a href="/create-product" class="w-full px-4 py-3 bg-slate-600 text-white rounded">Create Products</a>
+                <button type="button" class="w-full px-4 py-3 bg-slate-900 text-white rounded">Logout</button>
+            </div>
+        </div>
+        <div class="basis-9/12 h-full p-6">
+            <div class="flex items-center justify-center h-full w-full">
+                <form onsubmit="handleSubmit(event)" class="w-[500px] bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col gap-4">
+                        <h2 class="text-center mb-4 font-medium text-xl">Create Product</h2>
+                        <div class="flex flex-col gap-2">
+                            <label for="product-name">Product Name</label>
+                            <input type="text" id="product-name" name="product-name" class="h-12 w-full px-4 outline-0 rounded border border-slate-400">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="product-price">Product Price</label>
+                            <input type="text" id="product-price" name="product-price" class="h-12 w-full px-4 outline-0 rounded border border-slate-400">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="product-desc">Description</label>
+                            <textarea id="product-desc" name="product-desc" class="h-12 w-full px-4 outline-0 rounded border border-slate-400"></textarea>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <button class="h-12 w-full text-white px-4 outline-0 rounded bg-slate-800">Add</button>
+                        </div>
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+    <script>
+        const handleSubmit = async (e) => {
+           e.preventDefault()
+           const form = e.target 
+           const formData = new FormData(form)
+           const data = {
+            name: formData.get("product-name"),
+            price: formData.get("product-price"),
+            description: formData.get("product-desc")
+           }
+           try {
+            await axios.post("http://localhost:4000/api/products", data)
+            .then((res) => {
+              alert(res.data.message)
+              form.reset()
+              window.location.href = "/dashboard"   
+            })
+            .catch((err) => {
+                alert(err.response.data.message)
+            })
+           } catch (error) {
+              console.log(error.message)
+           }
+        }
+    </script>
+</body>
+
+</html>

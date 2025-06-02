@@ -1,6 +1,5 @@
 import User from "../models/authModels.js";
 import bcrypt from "bcrypt"
-import { name } from "ejs";
 import jwt from "jsonwebtoken"
 
 export const Signup = async (req, res) => {
@@ -62,14 +61,3 @@ export const getSignup = (req, res) => {
 export const getLogin = (req, res) => {
   res.render("login")
 }
-
-export const getDashboard = (req, res) => {
-  const { id, fullname, email, role } = req.user;
-
-  res.render("dashboard", {
-    id,
-    fullname,
-    email,
-    role
-  });
-};

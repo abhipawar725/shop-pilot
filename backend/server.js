@@ -5,6 +5,8 @@ import router from "./routes/authRoutes.js"
 import path, { join } from "path"
 import { fileURLToPath } from "url"
 import cookieParser from "cookie-parser" 
+import productRouter from "./routes/productRoutes.js"
+import protectRouteer from "./routes/protectedRoutes.js"
 
 dotenv.config()
 
@@ -29,5 +31,9 @@ app.set("views", path.join(__dirname, "views"))
 app.use(express.static("public"))
 
 app.use("/", router)
+app.use("/", protectRouteer)
+app.use("/api/products", productRouter)
+
 
 app.listen(port, () => console.log("App is connected"))
+
